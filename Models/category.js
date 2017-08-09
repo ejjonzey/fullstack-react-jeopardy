@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+var Schema = require("../db/schema");
 
 var Category = Schema.Category;
 module.exports = Category;

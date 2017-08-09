@@ -1,33 +1,38 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+const mongoose = require('mongoose');
 
-// Use native promises
-mongoose.Promise = global.Promise;
-
-const GameSchema = new Schema({
-    user: String,
-    points: Number,
-    Board: [],
-    categories: [CategorySchema]
+const questionSchema = mongoose.Schema({
+  value: Number,
+  question: String,
+  answer: String
 });
 
-const CatagorySchema = new Schema({
-    name: String,
-    questions:[QuestionSchema]
+const categorySchema = mongoose.Schema({
+  name: String,
+  questions: [questionSchema],
 });
 
-const QuestionSchema = new Schema({
-    value: Number,
-    question: String,
-    answer: String
+const gameSchema = mongoose.Schema({
+  user: String,
+  points: Number,
+  board: [Boolean],
+  categories: [categorySchema],
 });
 
-let GameModel = mongoose.model("Game", GameSchema);
-let CategoryModel = mongoose.model("Category", CatagorySchema);
-let QuestionModel = mongoose.model("Question", QuestionSchema);
+gameSchema.pre('save', function(next){
+  const emptyBoard = [
+    false, false, false, false, false, false,
+    false, false, false, false, false, false,
+    false, false, false, false, false, false,
+    false, false, false, false, false, false, 
+    false, false, false, false, false, false
+  ];
+  this.board = emptyBoard;
+  next();
+})
+const Question = mongoose.model('Question', questionSchema);
+const Category = mongoose.model('Category', categorySchema);
+const Game = mongoose.model('Game', gameSchema);
 
 module.exports = {
-    Game: GameModel,
-    Category: CategoryModel,
-    Question: QuestionModel
-};
+  Question, Category, Game
+}
