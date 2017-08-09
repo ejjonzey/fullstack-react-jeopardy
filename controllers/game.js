@@ -15,5 +15,12 @@ router.get("/:id", (req, res) => {
   })
 })
 
+router.put("/:id", (req, res) => {
+  Game.findByIdAndUpdate(req.params.id, {points: req.body.points}).then((game) =>{
+    res.json(game);
+  })
+});
+
+
 
 module.exports = router;
